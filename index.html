@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Birthdays">
 <meta name="theme-color" content="#faf7f2">
-<title>🎂 Birthday Recall 2</title>
+<title>🎂 Birthday Recall</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -20,147 +20,505 @@
   --acc:#c4623a; --acc2:#e8937a;
   --bdr:#ddd0bb; --shd:rgba(28,20,9,.08);
   --green:#4e7a52; --amber:#a06825; --slate:#6b5c48;
-  /* CORRECTIF POUR TON TÉLÉPHONE ICI */
-  --sb: env(safe-area-inset-bottom, 20px);
-  --st: env(safe-area-inset-top, 0px);
+  --sb:env(safe-area-inset-bottom,0px);
+  --st:env(safe-area-inset-top,0px);
   --serif:'Playfair Display',Georgia,serif;
   --sans:'DM Sans',system-ui,sans-serif;
-  --nav-h: 65px;
+  --nav-h:60px;
 }
 
-html,body{height:100%;background:var(--bg);overflow:hidden;position:fixed;width:100%;}
-body{font-family:var(--sans);color:var(--ink);-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:var(--bg);overflow:hidden}
+body{
+  font-family:var(--sans);color:var(--ink);
+  -webkit-text-size-adjust:100%;
+  -webkit-tap-highlight-color:transparent;
+}
 
-#shell{display:flex;flex-direction:column;height:100vh;max-width:430px;margin:0 auto;position:relative;}
+/* ── Shell ────────────────── */
+#shell{
+  display:flex;flex-direction:column;height:100%;
+  max-width:430px;margin:0 auto;position:relative;
+}
+
+/* Safe area top */
 #safe-top{background:var(--bg);height:var(--st);flex-shrink:0}
 
-#hdr{padding:13px 18px 11px;border-bottom:1px solid var(--bdr);background:rgba(250,247,242,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);flex-shrink:0;display:flex;align-items:center;justify-content:space-between;}
+/* Header */
+#hdr{
+  padding:13px 18px 11px;
+  border-bottom:1px solid var(--bdr);
+  background:rgba(250,247,242,.95);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:space-between;
+}
 #hdr-title{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--ink)}
 #hdr-sub{font-size:11.5px;color:var(--ink3);margin-top:2px}
 
+/* Scrollable area */
 #content{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;position:relative}
 
-/* NAVIGATION DU BAS AJUSTÉE POUR TON ÉCRAN */
+/* ── Bottom Nav ───────────── */
 #nav{
   display:flex;border-top:1px solid var(--bdr);
-  background:rgba(250,247,242,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  padding-bottom: var(--sb);
-  height: calc(var(--nav-h) + var(--sb));
+  background:rgba(250,247,242,.95);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  padding-bottom:var(--sb);height:calc(var(--nav-h) + var(--sb));
   flex-shrink:0;
 }
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;touch-action:manipulation;color:var(--ink3);transition:color .15s;padding-top:10px;}
+.nb{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;border:none;background:none;
+  cursor:pointer;touch-action:manipulation;color:var(--ink3);
+  transition:color .15s;padding:6px 0;
+}
 .nb.on{color:var(--acc)}
 .nb-icon{font-size:21px;line-height:1}
 .nb-lbl{font-size:10px;font-weight:500;letter-spacing:.02em}
 
+/* ── Pages ────────────────── */
 .page{padding:18px 16px 32px}
 .tab{display:none;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .tab.on{display:block}
 .pv{display:none}
 .pv.on{display:block}
 
+/* ── Typography ──────────── */
 .sec{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--ink);margin-bottom:14px}
 .eyebrow{font-size:10.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3)}
 
-.surface{background:#fff;border:1px solid var(--bdr);border-radius:16px;padding:20px;box-shadow:0 2px 14px var(--shd);}
+/* ── Cards ────────────────── */
+.surface{
+  background:#fff;border:1px solid var(--bdr);
+  border-radius:16px;padding:20px;
+  box-shadow:0 2px 14px var(--shd);
+}
+
+/* Stats */
 .stat-row{margin-bottom:17px}
+.stat-row:last-child{margin-bottom:0}
 .stat-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .stat-name{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:500;color:var(--ink2)}
 .stat-val{font-size:14px;font-weight:700}
 .bar-t{height:6px;border-radius:3px;background:#ede5d5;overflow:hidden}
 .bar-f{height:100%;border-radius:3px;transition:width .9s cubic-bezier(.4,0,.2,1)}
 
-.up-item{display:flex;align-items:center;gap:13px;padding:12px 14px;background:#fff;border:1px solid var(--bdr);border-radius:13px;margin-bottom:9px;}
-.av{width:40px;height:40px;border-radius:50%;background:var(--sur);border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink2);flex-shrink:0;}
+/* Upcoming */
+.up-item{
+  display:flex;align-items:center;gap:13px;
+  padding:12px 14px;background:#fff;border:1px solid var(--bdr);
+  border-radius:13px;margin-bottom:9px;
+}
+.av{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--sur);border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:16px;font-weight:700;color:var(--ink2);flex-shrink:0;
+}
 .up-name{font-size:14.5px;font-weight:500;color:var(--ink)}
 .up-date{font-size:12.5px;color:var(--ink3);margin-top:2px}
-.soon{margin-left:auto;flex-shrink:0;background:#fdf3e7;border:1px solid #e5c97a;color:#a06825;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;}
+.soon{
+  margin-left:auto;flex-shrink:0;
+  background:#fdf3e7;border:1px solid #e5c97a;
+  color:#a06825;font-size:11px;font-weight:600;
+  padding:3px 9px;border-radius:20px;white-space:nowrap;
+}
 
+/* Mode buttons */
 .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
-.mc{background:#fff;border:1.5px solid var(--bdr);border-radius:14px;padding:18px 14px;cursor:pointer;touch-action:manipulation;text-align:left;width:100%;}
+.mc{
+  background:#fff;border:1.5px solid var(--bdr);border-radius:14px;
+  padding:18px 14px;cursor:pointer;touch-action:manipulation;
+  text-align:left;width:100%;transition:border-color .2s;
+}
+.mc:active{transform:scale(.97)}
 .mc.off{opacity:.42;pointer-events:none}
 .mc-icon{font-size:26px;margin-bottom:10px}
 .mc-title{font-family:var(--serif);font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:4px}
 .mc-sub{font-size:11.5px;color:var(--ink3);line-height:1.45}
 .mc-due{font-size:12px;font-weight:500;color:var(--acc);margin-top:9px}
 
-/* FLASHCARD LOGIC ORIGINALE */
+/* Flashcard */
 #tcv{display:flex;flex-direction:column;min-height:calc(100vh - 150px)}
 .prog-wrap{flex-shrink:0;padding:14px 16px 0}
 .prog-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--ink3);margin-bottom:6px}
 .prog-t{height:4px;background:#ede5d5;border-radius:2px;overflow:hidden}
 .prog-f{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--acc),#d4913a);transition:width .4s ease}
-.card-area{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;min-height:220px;}
-.flip-wrap{perspective:1100px;width:100%;height:216px;cursor:pointer}
-.fi{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d;-webkit-transform-style:preserve-3d;}
+
+.card-area{
+  flex:1;display:flex;align-items:center;
+  justify-content:center;padding:16px;min-height:220px;
+}
+.flip-wrap{perspective:1100px;width:100%;height:216px;cursor:pointer;touch-action:manipulation}
+.fi{
+  position:relative;width:100%;height:100%;
+  transition:transform .55s cubic-bezier(.4,0,.2,1);
+  transform-style:preserve-3d;-webkit-transform-style:preserve-3d;
+}
 .fi.flipped{transform:rotateY(180deg)}
-.ff{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px 22px;}
+.ff{
+  position:absolute;inset:0;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:18px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px 22px;
+}
 .ff-front{background:#fff;border:1.5px solid var(--bdr);box-shadow:0 6px 28px var(--shd)}
 .ff-back{transform:rotateY(180deg);background:#fffcfa;border:1.5px solid #e8c0a0;box-shadow:0 6px 28px var(--shd)}
 .card-big{font-family:var(--serif);font-size:42px;font-weight:700;text-align:center;line-height:1.1}
 .card-hint{font-size:12.5px;color:var(--ink3);margin-top:18px}
-.act{flex-shrink:0;padding:0 16px 18px}
-.show-btn{width:100%;padding:15px;background:var(--acc);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:500;font-family:var(--sans);}
-.rat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.rb{border-radius:10px;border:1.5px solid;padding:10px 3px;cursor:pointer;text-align:center;}
-.rb-lbl{font-size:13.5px;font-weight:700;display:block}
+.back-pre{font-family:var(--serif);font-size:15px;font-style:italic;color:var(--ink2);margin-bottom:8px;text-align:center}
 
-.cl-item{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--bdr);border-radius:13px;padding:13px 14px;margin-bottom:10px;}
+.act{flex-shrink:0;padding:0 16px 18px}
+.show-btn{
+  width:100%;padding:15px;background:var(--acc);color:#fff;
+  border:none;border-radius:12px;font-size:16px;font-weight:500;
+  cursor:pointer;touch-action:manipulation;font-family:var(--sans);
+  transition:filter .15s;
+}
+.show-btn:active{filter:brightness(.88)}
+
+.rat-prompt{font-size:12.5px;color:var(--ink3);text-align:center;margin-bottom:10px}
+.rat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.rb{
+  border-radius:10px;border:1.5px solid;padding:10px 3px;
+  cursor:pointer;touch-action:manipulation;text-align:center;
+  transition:transform .1s;
+}
+.rb:active{transform:scale(.94)}
+.rb-lbl{font-size:13.5px;font-weight:700;display:block}
+.rb-sub{font-size:10px;opacity:.72;display:block;margin-top:2px}
+
+/* Results */
+.res-wrap{text-align:center;padding:40px 18px 28px}
+.res-em{font-size:60px;margin-bottom:14px}
+.res-title{font-family:var(--serif);font-size:28px;font-weight:700;margin-bottom:8px}
+.res-sub{font-size:14.5px;color:var(--ink3);margin-bottom:26px}
+.res-card{
+  background:#fff;border:1px solid var(--bdr);border-radius:14px;
+  padding:18px 20px;text-align:left;margin-bottom:22px;
+}
+.res-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:14px}
+.res-row:last-child{margin-bottom:0}
+.res-badge{font-size:12.5px;font-weight:600;padding:2px 12px;border-radius:20px;border:1px solid}
+
+/* Card list */
+.cl-item{
+  display:flex;align-items:center;gap:12px;
+  background:#fff;border:1px solid var(--bdr);border-radius:13px;
+  padding:13px 14px;margin-bottom:10px;
+}
 .cl-info{flex:1;min-width:0}
 .cl-name{font-size:15px;font-weight:600;color:var(--ink)}
 .cl-bday{font-size:12.5px;color:var(--ink3);margin-top:2px}
-.ib{width:34px;height:34px;border-radius:9px;border:1px solid var(--bdr);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.cl-tags{display:flex;align-items:center;gap:7px;margin-top:7px}
+.stag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid}
+.cl-btns{display:flex;gap:6px;flex-shrink:0}
+.ib{
+  width:34px;height:34px;border-radius:9px;border:1px solid var(--bdr);
+  background:none;cursor:pointer;touch-action:manipulation;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  color:var(--ink2);transition:background .15s;
+}
+.ib:active{background:var(--sur)}
 .ib.del{border-color:#e8b8b8;color:#b03535}
+.ib.del:active{background:#fff3f3}
 
-#fab{position:fixed;right:18px;bottom:calc(var(--nav-h) + var(--sb) + 14px);width:56px;height:56px;border-radius:28px;background:var(--acc);color:#fff;border:none;box-shadow:0 4px 18px rgba(196,98,58,.42);display:none;align-items:center;justify-content:center;z-index:20;font-size:28px;}
-#form-overlay{position:absolute;inset:0;background:var(--bg);overflow-y:auto;z-index:30;display:none;padding-top:var(--st);}
-.fo-head{display:flex;align-items:center;gap:14px;padding:16px 16px 0;margin-bottom:22px;}
-.back-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--bdr);background:none;font-size:17px;display:flex;align-items:center;justify-content:center;color:var(--ink2);}
+/* FAB */
+#fab{
+  position:fixed;right:18px;
+  bottom:calc(var(--nav-h) + var(--sb) + 14px);
+  width:56px;height:56px;border-radius:28px;
+  background:var(--acc);color:#fff;border:none;
+  box-shadow:0 4px 18px rgba(196,98,58,.42);
+  cursor:pointer;touch-action:manipulation;
+  font-size:28px;display:none;align-items:center;justify-content:center;
+  transition:transform .15s,box-shadow .15s;z-index:20;
+}
+#fab:active{transform:scale(.91);box-shadow:0 2px 10px rgba(196,98,58,.32)}
+
+/* Form overlay */
+#form-overlay{
+  position:absolute;inset:0;background:var(--bg);
+  overflow-y:auto;z-index:30;display:none;
+}
+.fo-head{
+  display:flex;align-items:center;gap:14px;
+  padding:16px 16px 0;margin-bottom:22px;
+}
+.back-btn{
+  width:36px;height:36px;border-radius:50%;border:1px solid var(--bdr);
+  background:none;cursor:pointer;font-size:17px;
+  display:flex;align-items:center;justify-content:center;color:var(--ink2);
+  flex-shrink:0;
+}
 .form-inner{padding:0 16px 60px}
 .fg{margin-bottom:18px}
 .flbl{font-size:13px;font-weight:500;color:var(--ink2);display:block;margin-bottom:7px}
-.fi-t, .fi-sel{width:100%;font-family:var(--sans);font-size:16px;color:var(--ink);border:1.5px solid var(--bdr);border-radius:10px;padding:12px 14px;background:#fff;outline:none;-webkit-appearance:none;}
+.fi-t{
+  width:100%;font-family:var(--sans);font-size:16px;color:var(--ink);
+  border:1.5px solid var(--bdr);border-radius:10px;padding:12px 14px;
+  background:#fff;outline:none;-webkit-appearance:none;appearance:none;
+  transition:border-color .2s;
+}
+.fi-t:focus{border-color:var(--acc)}
 .fi-row{display:grid;grid-template-columns:2fr 1fr;gap:10px}
-.pri-btn{width:100%;padding:15px;background:var(--acc);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:500;font-family:var(--sans);}
+.fi-sel{
+  width:100%;font-family:var(--sans);font-size:16px;color:var(--ink);
+  border:1.5px solid var(--bdr);border-radius:10px;padding:12px 14px;
+  background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7a65' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 14px center;
+  -webkit-appearance:none;appearance:none;outline:none;padding-right:36px;
+}
+.pri-btn{
+  width:100%;padding:15px;background:var(--acc);color:#fff;
+  border:none;border-radius:12px;font-size:16px;font-weight:500;
+  cursor:pointer;touch-action:manipulation;font-family:var(--sans);
+  transition:filter .15s;
+}
+.pri-btn:active{filter:brightness(.88)}
+.ghost{
+  display:block;width:100%;padding:12px;margin-top:6px;
+  font-size:14px;color:var(--ink3);cursor:pointer;
+  border:none;background:none;font-family:var(--sans);
+  touch-action:manipulation;
+}
+
+/* Empty */
+.empty{text-align:center;padding:56px 16px;color:var(--ink3);font-size:14px;line-height:1.6}
+.empty-icon{font-size:40px;margin-bottom:12px}
+
+/* No-due notice */
+.no-due{
+  padding:20px;border:1.5px dashed var(--bdr);
+  border-radius:13px;text-align:center;font-size:14px;
+  color:var(--ink3);line-height:1.65;
+}
+
+/* Animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+.au{animation:fadeUp .3s ease}
+.pi{animation:popIn .35s cubic-bezier(.34,1.56,.64,1)}
 </style>
 </head>
 <body>
 <div id="shell">
   <div id="safe-top"></div>
+
+  <!-- Header -->
   <header id="hdr">
     <div>
       <div id="hdr-title">🎂 Birthday Recall</div>
       <div id="hdr-sub"></div>
     </div>
   </header>
+
+  <!-- Content -->
   <div id="content">
-    <div id="tab-home" class="tab on"><div class="page"><div class="surface" id="stats-el" style="margin-bottom:20px"></div><div class="sec">🗓 Coming Up</div><div id="upcoming-el"></div></div></div>
-    <div id="tab-train" class="tab"><div id="ts" class="pv"><div class="page"><div class="sec">Choose Mode</div><div class="mode-grid"><button class="mc" id="mc1" onclick="startTrain('nameToDate')"><div class="mc-icon">👤→📅</div><div class="mc-title">Name → Date</div><div class="mc-sub">Recall the birthday</div><div class="mc-due" id="due1"></div></button><button class="mc" id="mc2" onclick="startTrain('dateToName')"><div class="mc-icon">📅→👤</div><div class="mc-title">Date → Name</div><div class="mc-sub">Recall the person</div><div class="mc-due" id="due2"></div></button></div><div id="no-due" style="display:none;text-align:center;color:var(--ink3)">🎉 All caught up!</div></div></div><div id="tcv" class="pv"><div class="prog-wrap"><div class="prog-meta"><span id="pm-lbl"></span><span id="pm-cnt"></span></div><div class="prog-t"><div class="prog-f" id="prog-f" style="width:0%"></div></div></div><div class="card-area"><div class="flip-wrap" onclick="flipCard()"><div class="fi" id="fi"><div class="ff ff-front"><div class="eyebrow" id="front-ey" style="margin-bottom:14px"></div><div class="card-big" id="front-main"></div><div class="card-hint">tap to reveal →</div></div><div class="ff ff-back"><div class="eyebrow" style="color:#c9853a;margin-bottom:14px">Answer</div><div class="card-big" id="back-main"></div></div></div></div></div><div id="act-show" class="act"><button class="show-btn" onclick="flipCard()">Show Answer</button></div><div id="act-rate" class="act" style="display:none"><div class="rat-grid"><button class="rb" style="border-color:#e8a8a8;background:#fff3f3;color:#b03535" onclick="rateCard('again')"><span class="rb-lbl">Again</span></button><button class="rb" style="border-color:#e5c680;background:#fff8ef;color:#a06025" onclick="rateCard('hard')"><span class="rb-lbl">Hard</span></button><button class="rb" style="border-color:#9ab8e0;background:#eef4fc;color:#2a6aad" onclick="rateCard('good')"><span class="rb-lbl">Good</span></button><button class="rb" style="border-color:#9ecfac;background:#eef6f0;color:#3a7250" onclick="rateCard('easy')"><span class="rb-lbl">Easy</span></button></div></div></div></div>
-    <div id="tab-cards" class="tab"><div class="page" style="padding-bottom:80px"><div id="cards-el"></div></div></div>
-  </div>
-  <div id="form-overlay"><div class="fo-head"><button class="back-btn" onclick="closeForm()">←</button><div class="sec" id="form-title">Add Birthday</div></div><div class="form-inner"><div class="fg"><label class="flbl">Name</label><input class="fi-t" id="f-name" type="text" autocomplete="off"></div><div class="fg"><label class="flbl">Birthday</label><div class="fi-row"><select class="fi-sel" id="f-month"><option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option><option value="04">Apr</option><option value="05">May</option><option value="06">Jun</option><option value="07">Jul</option><option value="08">Aug</option><option value="09">Sep</option><option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option></select><input class="fi-t" id="f-day" type="number" min="1" max="31" placeholder="Day"></div></div><button class="pri-btn" id="save-btn" onclick="saveCard()">Add Birthday</button></div></div>
+
+    <!-- ═══ HOME TAB ═══ -->
+    <div id="tab-home" class="tab">
+      <div class="page">
+        <div class="surface" id="stats-el" style="margin-bottom:20px"></div>
+        <div class="sec">🗓 Coming Up</div>
+        <div id="upcoming-el"></div>
+      </div>
+    </div>
+
+    <!-- ═══ TRAIN TAB ═══ -->
+    <div id="tab-train" class="tab">
+
+      <!-- Mode select -->
+      <div id="ts" class="pv">
+        <div class="page">
+          <div class="sec">Choose Mode</div>
+          <div class="mode-grid">
+            <button class="mc" id="mc1" onclick="startTrain('nameToDate')">
+              <div class="mc-icon">👤→📅</div>
+              <div class="mc-title">Name → Date</div>
+              <div class="mc-sub">See a name, recall the birthday</div>
+              <div class="mc-due" id="due1"></div>
+            </button>
+            <button class="mc" id="mc2" onclick="startTrain('dateToName')">
+              <div class="mc-icon">📅→👤</div>
+              <div class="mc-title">Date → Name</div>
+              <div class="mc-sub">See a date, recall whose birthday</div>
+              <div class="mc-due" id="due2"></div>
+            </button>
+          </div>
+          <div class="no-due" id="no-due" style="display:none">
+            🎉 All caught up!<br>Come back tomorrow for your next review.
+          </div>
+        </div>
+      </div>
+
+      <!-- Flashcard -->
+      <div id="tcv" class="pv" style="min-height:calc(100vh - 150px);display:flex;flex-direction:column">
+        <div class="prog-wrap">
+          <div class="prog-meta">
+            <span id="pm-lbl" style="font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--ink3)"></span>
+            <span id="pm-cnt" style="font-size:12.5px;color:var(--ink3)"></span>
+          </div>
+          <div class="prog-t"><div class="prog-f" id="prog-f" style="width:0%"></div></div>
+        </div>
+
+        <div class="card-area">
+          <div class="flip-wrap" onclick="flipCard()">
+            <div class="fi" id="fi">
+              <div class="ff ff-front">
+                <div class="eyebrow" id="front-ey" style="margin-bottom:14px"></div>
+                <div class="card-big" id="front-main"></div>
+                <div class="card-hint">tap to reveal →</div>
+              </div>
+              <div class="ff ff-back">
+                <div class="eyebrow" style="color:#c9853a;margin-bottom:14px">Answer</div>
+                <div class="back-pre" id="back-pre"></div>
+                <div class="card-big" id="back-main"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="act-show" class="act">
+          <button class="show-btn" onclick="flipCard()">Show Answer</button>
+        </div>
+        <div id="act-rate" class="act" style="display:none">
+          <div class="rat-prompt">How well did you recall this?</div>
+          <div class="rat-grid">
+            <button class="rb" style="border-color:#e8a8a8;background:#fff3f3;color:#b03535" onclick="rateCard('again')">
+              <span class="rb-lbl">Again</span><span class="rb-sub">Forgot</span>
+            </button>
+            <button class="rb" style="border-color:#e5c680;background:#fff8ef;color:#a06025" onclick="rateCard('hard')">
+              <span class="rb-lbl">Hard</span><span class="rb-sub">Struggled</span>
+            </button>
+            <button class="rb" style="border-color:#9ab8e0;background:#eef4fc;color:#2a6aad" onclick="rateCard('good')">
+              <span class="rb-lbl">Good</span><span class="rb-sub">Got it</span>
+            </button>
+            <button class="rb" style="border-color:#9ecfac;background:#eef6f0;color:#3a7250" onclick="rateCard('easy')">
+              <span class="rb-lbl">Easy</span><span class="rb-sub">Perfect</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="tr" class="pv">
+        <div class="res-wrap pi">
+          <div class="res-em">🎉</div>
+          <div class="res-title">Session Complete!</div>
+          <div class="res-sub" id="res-sub"></div>
+          <div class="res-card" id="res-card"></div>
+          <button class="pri-btn" onclick="showTS()">Back to Training</button>
+        </div>
+      </div>
+
+    </div><!-- /train tab -->
+
+    <!-- ═══ CARDS TAB ═══ -->
+    <div id="tab-cards" class="tab">
+      <div class="page" style="padding-bottom:80px">
+        <div id="cards-el"></div>
+      </div>
+
+      <!-- Form overlay -->
+      <div id="form-overlay">
+        <div class="fo-head">
+          <button class="back-btn" onclick="closeForm()">←</button>
+          <div class="sec" id="form-title" style="margin-bottom:0">Add Birthday</div>
+        </div>
+        <div class="form-inner">
+          <div class="fg">
+            <label class="flbl">Name</label>
+            <input class="fi-t" id="f-name" type="text" placeholder="e.g. Grandma Rose" autocomplete="off">
+          </div>
+          <div class="fg">
+            <label class="flbl">Birthday</label>
+            <div class="fi-row">
+              <select class="fi-sel" id="f-month">
+                <option value="01">January</option><option value="02">February</option>
+                <option value="03">March</option><option value="04">April</option>
+                <option value="05">May</option><option value="06">June</option>
+                <option value="07">July</option><option value="08">August</option>
+                <option value="09">September</option><option value="10">October</option>
+                <option value="11">November</option><option value="12">December</option>
+              </select>
+              <input class="fi-t" id="f-day" type="number" min="1" max="31" placeholder="Day" inputmode="numeric">
+            </div>
+          </div>
+          <button class="pri-btn" id="save-btn" onclick="saveCard()">Add Birthday</button>
+          <button class="ghost" onclick="closeForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <!-- Bottom Nav -->
   <nav id="nav">
-    <button class="nb on" id="nb-home" onclick="goTab('home')"><span class="nb-icon">🏠</span><span class="nb-lbl">Home</span></button>
-    <button class="nb" id="nb-train" onclick="goTab('train')"><span class="nb-icon">🎯</span><span class="nb-lbl">Train</span></button>
-    <button class="nb" id="nb-cards" onclick="goTab('cards')"><span class="nb-icon">🗂️</span><span class="nb-lbl">Cards</span></button>
+    <button class="nb on" id="nb-home" onclick="goTab('home')">
+      <span class="nb-icon">🏠</span><span class="nb-lbl">Home</span>
+    </button>
+    <button class="nb" id="nb-train" onclick="goTab('train')">
+      <span class="nb-icon">🎯</span><span class="nb-lbl">Train</span>
+    </button>
+    <button class="nb" id="nb-cards" onclick="goTab('cards')">
+      <span class="nb-icon">🗂️</span><span class="nb-lbl">Cards</span>
+    </button>
   </nav>
 </div>
+
+<!-- FAB -->
 <button id="fab" onclick="openForm()">+</button>
 
 <script>
-/* TON CODE JAVASCRIPT ORIGINAL COMPLET */
-const KEY='br_storage_v1';
+/* ── Constants ─────────────────────────────────── */
+const KEY='br3';
 const MS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-let cards=[], tab='home', editId=null;
-let TR={mode:null,queue:[],qi:0,flipped:false};
+const ST={
+  mastered:{label:'Mastered',  clr:'#4e7a52',bg:'#edf4ee',bdr:'#b6d4b9'},
+  learning:{label:'In Progress',clr:'#a06825',bg:'#fdf3e7',bdr:'#e5c97a'},
+  new:     {label:'Unknown',   clr:'#6b5c48',bg:'#f5f0e8',bdr:'#d6cab5'},
+};
+const RC=[
+  {id:'again',label:'Again',clr:'#b03535',bg:'#fff3f3',bdr:'#e8a8a8'},
+  {id:'hard', label:'Hard', clr:'#a06025',bg:'#fff8ef',bdr:'#e5c680'},
+  {id:'good', label:'Good', clr:'#2a6aad',bg:'#eef4fc',bdr:'#9ab8e0'},
+  {id:'easy', label:'Easy', clr:'#3a7250',bg:'#eef6f0',bdr:'#9ecfac'},
+];
+const DEMO=[
+  {id:'1',name:'Maman', birthday:'04-22',ease:2.5,interval:0, status:'new',     nextReview:today(),     reviews:0},
+  {id:'2',name:'Papa',  birthday:'11-08',ease:2.5,interval:0, status:'new',     nextReview:today(),     reviews:0},
+  {id:'3',name:'Sophie',birthday:'07-14',ease:2.0,interval:5, status:'learning',nextReview:today(),     reviews:3},
+  {id:'4',name:'Lucas', birthday:'02-28',ease:2.5,interval:30,status:'mastered',nextReview:addDays(15), reviews:8},
+];
 
+/* ── State ─────────────────────────────────────── */
+let cards=[], tab='home', editId=null;
+let TR={mode:null,queue:[],qi:0,flipped:false,results:[]};
+
+/* ── Utils ─────────────────────────────────────── */
 function today(){return new Date().toISOString().split('T')[0]}
 function addDays(n){const d=new Date();d.setDate(d.getDate()+n);return d.toISOString().split('T')[0]}
 function fmt(mmdd){if(!mmdd)return'?';const[m,d]=mmdd.split('-').map(Number);return MS[m-1]+' '+d}
-function due(){return cards.filter(c=>c.nextReview<=today())}
-function save(){localStorage.setItem(KEY, JSON.stringify(cards));}
-function load(){const s=localStorage.getItem(KEY);cards=s?JSON.parse(s):[];}
+function ini(n){return n?n.trim()[0].toUpperCase():'?'}
+function due(){return cards.filter(c=>c.status!=='mastered'&&c.nextReview<=today())}
+function stats(){
+  return{
+    mastered:cards.filter(c=>c.status==='mastered').length,
+    learning:cards.filter(c=>c.status==='learning').length,
+    unknown: cards.filter(c=>c.status==='new').length,
+    total:   cards.length,
+  };
+}
+function daysUntil(mmdd){
+  const now=new Date();
+  const[m,d]=mmdd.split('-').map(Number);
+  let b=new Date(now.getFullYear(),m-1,d);
+  if(b<now)b.setFullYear(now.getFullYear()+1);
+  return Math.ceil((b-now)/86400000);
+}
 
+/* ── SM-2 ──────────────────────────────────────── */
 function applyRating(c,r){
   let ease=c.ease||2.5,interval=c.interval||0,ni,ne=ease;
   if(interval===0){ni=r==='again'?0:r==='easy'?4:1}
@@ -168,9 +526,28 @@ function applyRating(c,r){
   else if(r==='hard'){ni=Math.max(1,Math.round(interval*1.2));ne=Math.max(1.3,ease-.15)}
   else if(r==='good'){ni=Math.max(1,Math.round(interval*ease))}
   else{ni=Math.max(4,Math.round(interval*ease*1.3));ne=Math.min(2.5,ease+.15)}
-  return{...c,ease:ne,interval:ni,nextReview:addDays(ni||0),status:ni>=21?'mastered':'learning'};
+  const ns=ni>=21?'mastered':(r==='again'&&interval===0?'new':'learning');
+  return{...c,ease:ne,interval:ni,status:ns,nextReview:addDays(ni||0),reviews:(c.reviews||0)+1};
 }
 
+/* ── Storage ───────────────────────────────────── */
+function load(){try{const r=localStorage.getItem(KEY);cards=r?JSON.parse(r):JSON.parse(JSON.stringify(DEMO))}catch{cards=JSON.parse(JSON.stringify(DEMO))}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(cards))}catch{}}
+
+/* ── Header ────────────────────────────────────── */
+function updateHeader(){
+  const s=stats(),d=due().length;
+  const titles={home:'🎂 Birthday Recall',train:'🎯 Training',cards:'🗂️ My Cards'};
+  const subs={
+    home:`${s.total} card${s.total!==1?'s':''} · ${s.mastered} mastered`,
+    train:d>0?`${d} card${d!==1?'s':''} due today`:'All caught up!',
+    cards:`${s.total} birthday${s.total!==1?'s':''} saved`,
+  };
+  document.getElementById('hdr-title').textContent=titles[tab]||titles.home;
+  document.getElementById('hdr-sub').textContent=subs[tab]||'';
+}
+
+/* ── Tab nav ───────────────────────────────────── */
 function goTab(t){
   tab=t;
   document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));
@@ -178,64 +555,203 @@ function goTab(t){
   document.getElementById('tab-'+t).classList.add('on');
   document.getElementById('nb-'+t).classList.add('on');
   document.getElementById('fab').style.display=t==='cards'?'flex':'none';
-  if(t==='home')renderHome(); if(t==='train')showTS(); if(t==='cards')renderCards();
+  updateHeader();
+  if(t==='home')renderHome();
+  if(t==='train')showTS();
+  if(t==='cards')renderCards();
 }
 
+/* ── HOME ──────────────────────────────────────── */
 function renderHome(){
-  const s={m:cards.filter(c=>c.interval>=21).length, t:cards.length};
-  document.getElementById('stats-el').innerHTML=`<div class="stat-row"><div class="stat-meta"><span class="stat-name">⭐ Mastered</span><span class="stat-val">${s.m}/${s.t}</span></div><div class="bar-t"><div class="bar-f" style="width:${s.t?(s.m/s.t*100):0}%"></div></div></div>`;
-  document.getElementById('upcoming-el').innerHTML=cards.length ? cards.slice(0,5).map(c=>`<div class="up-item"><div class="av">${c.name[0]}</div><div><div class="up-name">${c.name}</div><div class="up-date">🎂 ${fmt(c.birthday)}</div></div></div>`).join('') : 'No cards.';
+  const s=stats();
+  const rows=[
+    {icon:'⭐',label:'Mastered',   val:s.mastered,clr:'#4e7a52'},
+    {icon:'📖',label:'In Progress',val:s.learning,clr:'#a06825'},
+    {icon:'❓',label:'Unknown',    val:s.unknown, clr:'#6b5c48'},
+  ];
+  document.getElementById('stats-el').innerHTML=rows.map(r=>`
+    <div class="stat-row">
+      <div class="stat-meta">
+        <span class="stat-name"><span>${r.icon}</span>${r.label}</span>
+        <span class="stat-val" style="color:${r.clr}">${r.val}<span style="font-weight:400;color:var(--ink3)"> / ${s.total}</span></span>
+      </div>
+      <div class="bar-t"><div class="bar-f" style="width:${s.total?(r.val/s.total*100).toFixed(1):0}%;background:${r.clr}"></div></div>
+    </div>`).join('');
+
+  const sorted=[...cards]
+    .map(c=>({...c,dl:daysUntil(c.birthday)}))
+    .sort((a,b)=>a.dl-b.dl).slice(0,10);
+
+  if(!sorted.length){
+    document.getElementById('upcoming-el').innerHTML=`<div class="empty"><div class="empty-icon">🎈</div>No birthdays added yet.<br>Go to Cards to add some!</div>`;
+    return;
+  }
+  document.getElementById('upcoming-el').innerHTML=sorted.map(c=>{
+    const badge=c.dl<=7?`<span class="soon">${c.dl===0?'Today 🎂':'In '+c.dl+'d'}</span>`:'';
+    return`<div class="up-item au">
+      <div class="av">${ini(c.name)}</div>
+      <div><div class="up-name">${c.name}</div><div class="up-date">🎂 ${fmt(c.birthday)}</div></div>
+      ${badge}
+    </div>`;
+  }).join('');
 }
 
+/* ── TRAIN SELECT ──────────────────────────────── */
 function showTS(){
-  document.querySelectorAll('#tab-train .pv').forEach(e=>e.style.display='none');
-  document.getElementById('ts').style.display='block';
-  const d=due().length;
-  document.getElementById('mc1').classList.toggle('off',d===0);
-  document.getElementById('mc2').classList.toggle('off',d===0);
-  document.getElementById('no-due').style.display=d===0?'block':'none';
+  showPV('ts');
+  const d=due();const has=d.length>0;
+  ['mc1','mc2'].forEach(id=>document.getElementById(id).classList.toggle('off',!has));
+  document.getElementById('due1').textContent=has?d.length+' card'+(d.length!==1?'s':'')+' due':'';
+  document.getElementById('due2').textContent=has?d.length+' card'+(d.length!==1?'s':'')+' due':'';
+  document.getElementById('no-due').style.display=has?'none':'block';
 }
 
+function showPV(id){
+  document.querySelectorAll('#tab-train .pv').forEach(e=>{e.classList.remove('on');e.style.display='none'});
+  const el=document.getElementById(id);
+  el.style.display=id==='tcv'?'flex':'block';
+  el.classList.add('on');
+}
+
+/* ── TRAIN CARD ────────────────────────────────── */
 function startTrain(mode){
-  TR={mode,queue:[...due()].sort(()=>Math.random()-.5),qi:0,flipped:false};
-  if(TR.queue.length) { document.getElementById('ts').style.display='none'; document.getElementById('tcv').style.display='flex'; renderCard(); }
+  const q=[...due()].sort(()=>Math.random()-.5);
+  if(!q.length)return;
+  TR={mode,queue:q,qi:0,flipped:false,results:[]};
+  renderCard();showPV('tcv');
 }
 
 function renderCard(){
-  const c=TR.queue[TR.qi];
-  document.getElementById('pm-cnt').textContent=`${TR.qi+1}/${TR.queue.length}`;
-  document.getElementById('prog-f').style.width=`${(TR.qi/TR.queue.length*100)}%`;
-  document.getElementById('front-main').textContent=TR.mode==='nameToDate'?c.name:fmt(c.birthday);
-  document.getElementById('back-main').textContent=TR.mode==='nameToDate'?fmt(c.birthday):c.name;
-  document.getElementById('fi').classList.toggle('flipped',TR.flipped);
-  document.getElementById('act-show').style.display=TR.flipped?'none':'block';
-  document.getElementById('act-rate').style.display=TR.flipped?'block':'none';
+  const{mode,queue,qi,flipped}=TR,c=queue[qi];if(!c)return;
+  document.getElementById('pm-lbl').textContent=mode==='nameToDate'?'Name → Date':'Date → Name';
+  document.getElementById('pm-cnt').textContent=`${qi+1} / ${queue.length}`;
+  document.getElementById('prog-f').style.width=`${(qi/queue.length*100).toFixed(1)}%`;
+
+  if(mode==='nameToDate'){
+    document.getElementById('front-ey').textContent='When is the birthday of';
+    document.getElementById('front-main').textContent=c.name;
+    document.getElementById('front-main').style.color='var(--ink)';
+    document.getElementById('back-pre').textContent=c.name+"'s birthday is";
+    document.getElementById('back-main').textContent=fmt(c.birthday);
+    document.getElementById('back-main').style.color='var(--acc)';
+  }else{
+    document.getElementById('front-ey').textContent='Whose birthday is on';
+    document.getElementById('front-main').textContent=fmt(c.birthday);
+    document.getElementById('front-main').style.color='var(--acc)';
+    document.getElementById('back-pre').textContent=fmt(c.birthday)+' is';
+    document.getElementById('back-main').textContent=c.name;
+    document.getElementById('back-main').style.color='var(--ink)';
+  }
+  document.getElementById('fi').classList.toggle('flipped',flipped);
+  document.getElementById('act-show').style.display=flipped?'none':'block';
+  document.getElementById('act-rate').style.display=flipped?'block':'none';
 }
 
 function flipCard(){TR.flipped=true;renderCard()}
+
 function rateCard(r){
   const c=TR.queue[TR.qi];
   cards=cards.map(x=>x.id===c.id?applyRating(x,r):x);
-  save(); TR.qi++; TR.flipped=false;
-  if(TR.qi>=TR.queue.length) showTS(); else renderCard();
+  save();
+  TR.results.push({name:c.name,rating:r});
+  TR.qi++;TR.flipped=false;
+  if(TR.qi>=TR.queue.length)showResults();
+  else renderCard();
 }
 
+function showResults(){
+  const{results}=TR;
+  document.getElementById('res-sub').textContent=`You reviewed ${results.length} birthday${results.length!==1?'s':''}`;
+  const counts={};results.forEach(r=>{counts[r.rating]=(counts[r.rating]||0)+1});
+  const rows=RC.map(r=>{
+    const n=counts[r.id]||0;if(!n)return'';
+    return`<div class="res-row">
+      <span style="color:${r.clr};font-weight:500">${r.label}</span>
+      <span class="res-badge" style="color:${r.clr};border-color:${r.bdr};background:${r.bg}">${n}</span>
+    </div>`;
+  }).filter(Boolean).join('');
+  document.getElementById('res-card').innerHTML=
+    `<div style="font-family:var(--serif);font-size:15px;color:var(--ink2);margin-bottom:14px">Session summary</div>`+rows;
+  showPV('tr');updateHeader();
+}
+
+/* ── CARDS LIST ────────────────────────────────── */
 function renderCards(){
-  document.getElementById('cards-el').innerHTML=cards.map(c=>`<div class="cl-item"><div class="cl-info"><div class="cl-name">${c.name}</div><div class="cl-bday">🎂 ${fmt(c.birthday)}</div></div><button class="ib del" onclick="delCard('${c.id}')">✕</button></div>`).join('');
+  const el=document.getElementById('cards-el');
+  if(!cards.length){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">🎈</div>No birthdays yet.<br>Tap + to add your first!</div>`;
+    return;
+  }
+  const sorted=[...cards].sort((a,b)=>{
+    const o={new:0,learning:1,mastered:2};
+    return(o[a.status]||0)-(o[b.status]||0);
+  });
+  el.innerHTML=sorted.map(c=>{
+    const s=ST[c.status]||ST.new;
+    const rev=c.reviews>0?c.reviews+' review'+(c.reviews!==1?'s':''):'New';
+    return`<div class="cl-item au">
+      <div class="av">${ini(c.name)}</div>
+      <div class="cl-info">
+        <div class="cl-name">${c.name}</div>
+        <div class="cl-bday">🎂 ${fmt(c.birthday)}</div>
+        <div class="cl-tags">
+          <span class="stag" style="color:${s.clr};background:${s.bg};border-color:${s.bdr}">${s.label}</span>
+          <span style="font-size:11px;color:var(--ink3)">${rev}</span>
+        </div>
+      </div>
+      <div class="cl-btns">
+        <button class="ib" onclick="openEditForm('${c.id}')">✏️</button>
+        <button class="ib del" onclick="delCard('${c.id}')">✕</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
-function openForm(){document.getElementById('form-overlay').style.display='block';}
-function closeForm(){document.getElementById('form-overlay').style.display='none';}
+/* ── FORM ──────────────────────────────────────── */
+function openForm(){
+  editId=null;
+  document.getElementById('form-title').textContent='Add Birthday';
+  document.getElementById('save-btn').textContent='Add Birthday';
+  document.getElementById('f-name').value='';
+  document.getElementById('f-month').value='01';
+  document.getElementById('f-day').value='';
+  document.getElementById('form-overlay').style.display='block';
+  setTimeout(()=>document.getElementById('f-name').focus(),120);
+}
+
+function openEditForm(id){
+  const c=cards.find(x=>x.id===id);if(!c)return;
+  editId=id;
+  const[m,d]=c.birthday.split('-');
+  document.getElementById('form-title').textContent='Edit Birthday';
+  document.getElementById('save-btn').textContent='Save Changes';
+  document.getElementById('f-name').value=c.name;
+  document.getElementById('f-month').value=m;
+  document.getElementById('f-day').value=String(parseInt(d));
+  document.getElementById('form-overlay').style.display='block';
+}
+
+function closeForm(){document.getElementById('form-overlay').style.display='none';editId=null}
+
 function saveCard(){
-  const name=document.getElementById('f-name').value;
-  const mmdd=`${document.getElementById('f-month').value}-${document.getElementById('f-day').value.padStart(2,'0')}`;
-  if(!name)return;
-  cards.push({id:Date.now().toString(),name,birthday:mmdd,ease:2.5,interval:0,nextReview:today()});
-  save(); closeForm(); renderCards();
+  const name=document.getElementById('f-name').value.trim();
+  const month=document.getElementById('f-month').value;
+  const day=parseInt(document.getElementById('f-day').value);
+  if(!name||isNaN(day)||day<1||day>31)return;
+  const mmdd=`${month}-${String(day).padStart(2,'0')}`;
+  if(editId){cards=cards.map(c=>c.id===editId?{...c,name,birthday:mmdd}:c)}
+  else cards.push({id:Date.now().toString(),name,birthday:mmdd,ease:2.5,interval:0,status:'new',nextReview:today(),reviews:0});
+  save();closeForm();renderCards();updateHeader();
 }
-function delCard(id){cards=cards.filter(c=>c.id!==id);save();renderCards();}
 
-load(); goTab('home');
+function delCard(id){
+  if(!confirm('Remove this birthday?'))return;
+  cards=cards.filter(c=>c.id!==id);save();renderCards();updateHeader();
+}
+
+/* ── Boot ──────────────────────────────────────── */
+load();
+goTab('home');
 </script>
 </body>
 </html>
